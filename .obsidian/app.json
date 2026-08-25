@@ -2,5 +2,6 @@
   "attachmentFolderPath": "_assets",
   "newLinkFormat": "relative",
   "useMarkdownLinks": false,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "showLineNumber": false
 }

@@ -32,7 +32,7 @@ date: 2026-08-26
 }
 ~~~
 
-更换了供应商
+更换了供应商添加了deepseek有关的多模态api
 ~~~json
 {
   "enabledPlugins": {

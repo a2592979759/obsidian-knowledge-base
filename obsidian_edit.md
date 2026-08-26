@@ -5,7 +5,6 @@ created: 2026-8-25 14:54:57
 tags:
   - MOC
   - 文献
-date: <% tp.date.now("YYYY-MM-DD") %>
 aliases:
 ---
 

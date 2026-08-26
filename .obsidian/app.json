@@ -3,5 +3,6 @@
   "newLinkFormat": "relative",
   "useMarkdownLinks": false,
   "alwaysUpdateLinks": true,
-  "showLineNumber": false
+  "showLineNumber": false,
+  "promptDelete": false
 }

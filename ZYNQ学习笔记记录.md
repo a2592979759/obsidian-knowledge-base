@@ -240,7 +240,7 @@ petalinux-config --get-hw-description ../hdf/
 
 **配置与编译uboot**
 
-~~~
+~~~bash
 petalinux-config -c u-boot
 petalinux-build -c u-boot
 ~~~

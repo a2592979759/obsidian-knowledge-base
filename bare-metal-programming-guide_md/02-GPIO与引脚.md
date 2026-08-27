@@ -1,0 +1,97 @@
+---
+tags:
+  - embedded
+  - 裸机编程
+  - 单片机组
+created: 2026-08-27
+source: bare-metal-programming-guide/README_zh-CN.md
+---
+
+# 02 · GPIO 与引脚
+
+> 前置知识：[[01-存储与寄存器]]。本节改造直接地址访问为清晰的结构体 API，是后续所有外设编程（UART、SysTick…）的范式基础。
+
+## 可读性更好的外设寄存器编程
+
+在上一节我们已经学习到可以通过直接访问存储地址来读写外设寄存器，下面复习下将 GPIO A3 设为输出模式的代码：
+
+```c
+  * (volatile uint32_t *) (0x40020000 + 0) &= ~(3 << 6);  // CLear bit range 6-7
+  * (volatile uint32_t *) (0x40020000 + 0) |= 1 << 6;     // Set bit range 6-7 to 1
+```
+
+这段代码有些诡秘，如果不加以注释，很难理解。我们可以把这段代码重写成更易读的形式，方法就是用一个包含 32 位域的结构体来表示整个外设。我们来看一下数据手册 8.4 节中描述的 GPIO 外设的寄存器，它们是 MODER、OTYPER、OSPEEDR、PUPDR、IDR、ODR、BSRR、LCKR、AFR，它们的偏移量分别是 0、4、8，等等，以此类推，这意味着我们可以用一个 32 位域的结构体来表示，然后这样定义 GPIOA：
+
+```c
+struct gpio {
+  volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFR[2];
+};
+
+#define GPIOA ((struct gpio *) 0x40020000)
+```
+
+这样我们就可以定义一个设置 GPIO 引脚模式的函数：
+
+```c
+// Enum values are per datasheet: 0, 1, 2, 3
+enum {GPIO_MODE_INPUT, GPIO_MODE_OUTPUT, GPIO_MODE_AF, GPIO_MODE_ANALOG};
+
+static inline void gpio_set_mode(struct gpio *gpio, uint8_t pin, uint8_t mode) {
+  gpio->MODER &= ~(3U << (pin * 2));        // Clear existing setting
+  gpio->MODER |= (mode & 3) << (pin * 2);   // Set new mode
+}
+```
+
+现在重写上面将 GPIO A3 设为输出模式的代码：
+
+```c
+gpio_set_mode(GPIOA, 3 /* pin */, GPIO_MODE_OUTPUT);  // Set A3 to output
+```
+
+## 多 GPIO 组与引脚编号
+
+MCU 有好多个 GPIO 外设（也常被叫作 'banks'）：A、B、C...K，在数据手册 2.3 节可以看到，它们映射的存储空间相隔 1KB，GPIOA 起始地址为 `0x40020000`，GPIOB 起始地址为 `0x40020400`，以此类推：
+
+```c
+#define GPIO(bank) ((struct gpio *) (0x40020000 + 0x400 * (bank)))
+```
+
+我们可以给引脚进行编号，既包含组号，也包含序号。为了做到这一点，我们用一个 2 字节的 `uint16_t` 类型的数，高字节表示组号，低字节表示序号：
+
+```c
+#define PIN(bank, num) ((((bank) - 'A') << 8) | (num))
+#define PINNO(pin) (pin & 255)
+#define PINBANK(pin) (pin >> 8)
+```
+
+通过这种方法，我们可以指定任意 GPIO 引脚：
+
+```c
+  uint16_t pin1 = PIN('A', 3);    // A3   - GPIOA pin 3
+  uint16_t pin2 = PIN('G', 11);   // G11  - GPIOG pin 11
+```
+
+现在，我们用这个方法再次改写 `gpio_set_mode()` 函数：
+
+```c
+static inline void gpio_set_mode(uint16_t pin, uint8_t mode) {
+  struct gpio *gpio = GPIO(PINBANK(pin)); // GPIO bank
+  uint8_t n = PINNO(pin);                 // Pin number
+  gpio->MODER &= ~(3U << (n * 2));        // Clear existing setting
+  gpio->MODER |= (mode & 3) << (n * 2);   // Set new mode
+}
+```
+
+这样再设置 GPIO A3 为输出模式就很明了了：
+
+```c
+  uint16_t pin = PIN('A', 3);            // Pin A3
+  gpio_set_mode(pin, GPIO_MODE_OUTPUT);  // Set to output
+```
+
+至此我们已经为 GPIO 外设创建了一个有用的初始化 API，其它外设，比如串口，也可以用相似的方法来实现。这是一种很好的编程实践，可以让代码清晰可读。
+
+## 下一步
+
+- 接着在 [[03-启动代码与链接]] 理解 MCU 如何启动、向量表和链接脚本。
+- 了解 GPIO 时钟使能、点亮 LED 见 [[05-LED闪烁]]。

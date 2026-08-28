@@ -3,5 +3,7 @@
   "templater-obsidian",
   "dataview",
   "calendar",
-  "obsidian-paste-image-rename"
+  "obsidian-paste-image-rename",
+  "notebook-navigator",
+  "obsidian-style-settings"
 ]

@@ -5,6 +5,7 @@ author: lqq
 tags:
   - markdown
 ---
+
 ## 链接
 - 插入[[obsidian_edit_2]](输入两个中括号) 按住crtl就可以查看链接内容（鼠标还能实现跳转）
 - [[obsidian_edit_2#heading 1]]
@@ -49,7 +50,7 @@ _一个下划线为斜体_
 2. 序号2
 
 任务清单
-- [ ] task1
+- [x] task1
 - [x]  task2
 减号空格中括号空格空格
 - [ ] 也可以直接ctrl + p找代办
@@ -83,6 +84,7 @@ sdf[^3]
 ![[_assets/test_png2.png]]
 
 插入表格(或者装对应的插件)
+
 
 |     |     |
 | --- | --- |

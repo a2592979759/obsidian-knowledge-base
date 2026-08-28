@@ -42,11 +42,11 @@ tags: [工具链, skill, mcp, plugin]
 - **认识**：MCP Server 是自己编写的服务，对外暴露「工具」（函数），Claude 通过 stdio/HTTP 连接并调用。协议标准，让 LLM 与外部能力解耦
 - **MCP vs LangChain vs Workflow**：
 
-| | 是什么 | 谁用 |
-|---|---|---|
-| MCP | 协议标准，暴露工具给 LLM | 你写服务，Claude 调用 |
-| LangChain | 应用框架，构建 LLM 应用 | 你写应用，自己跑 |
-| Workflow | Claude Code 的多 Agent 编排 | Claude 自己用，你触发 |
+|           | 是什么                     | 谁用             |
+| --------- | ----------------------- | -------------- |
+| MCP       | 协议标准，暴露工具给 LLM          | 你写服务，Claude 调用 |
+| LangChain | 应用框架，构建 LLM 应用          | 你写应用，自己跑       |
+| Workflow  | Claude Code 的多 Agent 编排 | Claude 自己用，你触发 |
 
 - **RAG**（Retrieval-Augmented Generation，检索增强生成）：让 LLM 回答前先去查资料再回答。解决知识截止、幻觉两个硬伤。流程：用户问 → 搜知识库 → 内容+问题发给 LLM → 基于资料回答
 - 理解三者后想扩展 Claude 能力（查数据库、调 API）就写 MCP Server；想要自己做 LLM 应用用 LangChain；Workflow 直接用即可

@@ -30,6 +30,18 @@
 | 状态管理 | setState | Demo 无需 provider/riverpod |
 | 照片存储 | 应用私有目录 `[documents]/photos/` | 不依赖系统相册权限，自己选/拍即存 |
 
+**目录结构：** 整个 Flutter 项目（`flutter create` 生成的工程）整体放在仓库根下的 **`test_app/`** 目录内，不散落到仓库其它位置。
+
+```
+obsidian-knowledge-base/
+└── test_app/          # Flutter 项目根（整个工程都在这里）
+    ├── lib/
+    ├── android/
+    ├── pubspec.yaml
+    └── ...
+docs/superpowers/specs/   # 本设计文档（保持不动）
+```
+
 ## 3. 数据模型（单表）
 
 日记 = 一行记录，标签和照片用逗号分隔字符串存（**牺牲规范化换简单，demo 可接受**）。
@@ -123,8 +135,8 @@ Demo 验证 = 能跑起来 + 手动走通主流程：
 
 ## 8. 交付清单
 
-- [ ] Flutter 项目骨架（`flutter create`）
-- [ ] `pubspec.yaml` 加 sqflite / path_provider / image_picker
+- [ ] `test_app/` 下 `flutter create` 项目骨架
+- [ ] `test_app/pubspec.yaml` 加 sqflite / path_provider / image_picker
 - [ ] 数据库 helper 类（建表、CRUD）
 - [ ] PhotoStore（拷贝、删除照片文件）
 - [ ] Repository

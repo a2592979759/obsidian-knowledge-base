@@ -1,7 +1,7 @@
 {
   "__VERSION__": 2,
   "release.previous-version": "4.2.7",
-  "link.hosted-prefer": "browser",
   "playback.track.default-enabled": true,
-  "playback.track.default-languages": []
+  "playback.track.default-languages": [],
+  "link.hosted-prefer": "browser"
 }
